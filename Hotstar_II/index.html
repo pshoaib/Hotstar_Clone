@@ -1,0 +1,332 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #navbar{
+            border:1px solid red;
+            background-color: aqua;
+            height: 60px;
+            width: 80%;
+            margin: auto;
+            justify-content: end;
+            margin-bottom: 10px;
+        }
+          #navbar > div{
+              
+              margin: auto;
+              display: flex;
+             margin-right: 10px;
+              width:260px;
+            margin-top: 20px;
+              
+            
+    
+         }
+         #movies{
+             display: flex;
+               height:320px;
+               width: 30%;
+              
+               margin-right: 10px;
+               
+             
+          }
+          #maindiv{
+              margin-top: 0px;
+
+          }
+          #p{
+            margin-top: 0px;
+          }
+          #poster{
+            
+            height:215px;
+              width: 98%;
+              margin: 3px;
+          }
+          #below{
+            
+              width: 61.5%;
+              height: 310px;
+              margin-left: 150px;
+              margin-bottom: 20px;
+             
+          }
+          #lowest {
+           
+            width: 80%;
+              height: 310px;
+              margin: auto;
+          display: grid;
+         
+          grid-template-columns:repeat(4,3fr);
+          gap: 20px;
+       height: 300px;
+          line-height: 18px;
+        
+          font-family: sans-serif;
+          overflow: scroll;
+          color: black;
+          margin-bottom: 20px;
+         
+          }
+          #lowest> div{
+     
+     border:1px solid lightslategray;
+     height: 400px;
+   }
+          #dog{
+              width: 90.5%;
+              height: 90.5%;
+          }
+
+    </style>
+</head>
+<body id="body">   
+            <div id="navbar">  
+              
+                    <!-- debounce(main,1000)  main()--> 
+                        <div><input id="query" oninput="debounce(main) " value="Search Movie" /></div>
+                     
+                        <div id="movies"></div>
+           </div> 
+           <div id="below">
+               below
+
+           </div>
+           <div id="lowest">
+            
+           </div>
+    
+</body>
+</html>
+<script src="/script.js/index.js"></script>
+
+<script>
+    let timerid;
+
+    let movies = document.getElementById("movies");
+    movies.innerHTML=null;
+   
+       async function searchmovies()
+        {
+            try{
+
+            let input = document.getElementById("query").value;
+            let res = await fetch(`https://www.omdbapi.com/?apikey=e34ed918&s=${input}`)
+            let data = await res.json();
+            console.log(data)
+            let id;
+
+            if(input != data.Search  && input.length===3){
+                
+             movies.innerHTML=null;
+
+                let img = document.createElement("img");
+                  img.setAttribute("src","https://imageio.forbes.com/blogs-images/zarastone/files/2017/05/21Amazon-Barkley-404.jpg?fit=bounds&format=jpg&width=960")
+                  img.setAttribute("id","dog")
+                  movies.append(img) 
+              }  if( input ==="" || input===" ")
+                {    
+                         movies.innerHTML=null;
+                }
+            // console.log(data.Search)
+          let array=data.Search;
+           return array;
+            console.log(data)
+              appedmovies(data)
+              console.log(data)
+
+              return lowest(array)
+
+              //AIzaSyA-6OFYl5uzjnY8Cgt3ByuuO3KMNaxpNDc
+// https://youtube.googleapis.com/youtube/v3/search?key=[YOUR_API_KEY] HTTP/1.1
+
+    }
+        catch(err)
+        {
+            console.log(err)
+        }
+}
+
+        function appedmovies(data)
+        {  
+        data.forEach(function(elem,index,array){
+             movies.innerHTML=null;
+             
+             console.log(elem)
+
+             let maindiv = document.createElement("div")
+               maindiv.setAttribute("id","maindiv")
+
+                let p = document.createElement("h3")
+                     p.innerHTML=` Movie Name  : ${elem.Title}`
+                    p.setAttribute("id","p")
+                        
+
+                let h3 = document.createElement("h3")
+                    h3.innerText=`Release Date ${elem.Year}`;
+
+                let imgs = document.createElement("img")
+                   imgs.setAttribute("src",elem.Poster)
+                   imgs.setAttribute("id","poster")
+
+               
+        
+                maindiv.append(p,h3,imgs)
+                movies.append(maindiv)
+
+            })
+         
+        }
+        async function main(){      
+        try{
+
+         let data = await searchmovies();
+
+            if(data===undefined){
+                return false;
+            }
+           
+
+         appedmovies(data)
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
+
+    function debounce(func,delay)
+    {
+       console.log(timerid)  
+        
+       if(timerid)
+        {
+            clearTimeout(timerid)
+        }
+
+        timerid=setTimeout(function(){
+
+         main();
+
+        },delay)
+
+       
+    }
+    
+    var arr=[
+            //   "https://cdn.shopify.com/s/files/1/0057/3728/3618/products/3998dd3fa7e628e415e9805b960bec61_500x749.jpg?v=1573592743",
+              "https://shifu.hotstarext.com/SOURCE/VOD/cd-2022-03-17/Desk-76aecf4b-d05a-42a2-87e4-d97e8fb8da31.jpg",
+              "https://media.gettyimages.com/photos/posters-for-the-harry-potter-and-the-order-of-the-phoenix-film-are-picture-id74774245?k=20&m=74774245&s=612x612&w=0&h=qJIeekQyI0-LHTXTiDVChlEcEh7-2aoOW4CnKg8O-YM=",
+            "https://media.gettyimages.com/photos/posters-for-the-harry-potter-and-the-order-of-the-phoenix-film-are-picture-id74774245?k=20&m=74774245&s=612x612&w=0&h=qJIeekQyI0-LHTXTiDVChlEcEh7-2aoOW4CnKg8O-YM=",
+            "https://img1.hotstarext.com/image/upload/f_auto,t_web_m_1x/sources/r1/cms/prod/3668/593668-h",
+              "https://media.gettyimages.com/photos/bearded-tattooed-viking-warrior-king-in-front-of-warrior-hoard-and-picture-id1006692290?k=20&m=1006692290&s=612x612&w=0&h=nqo9FXWqcGckrvdwZIWJDg9ERdVzNOf5H_fR-rPvhGA=",
+            "https://img1.hotstarext.com/image/upload/f_auto,t_web_m_1x/sources/r1/cms/prod/9996/1129996-h-5539be3af21f",
+            "https://img1.hotstarext.com/image/upload/f_auto,t_web_m_1x/sources/r1/cms/prod/8284/388284-h",
+]
+
+
+    
+    let done = localStorage.setItem("savekar",JSON.stringify(arr))
+
+    var images = JSON.parse(localStorage.getItem("savekar"))
+               
+    let div = document.querySelector("#below")
+            div.innerHTML=null;
+ 
+        let img = document.createElement("img");
+          img.src=images[1];
+          img.style.width="100%"
+          img.style.height="100%"
+          
+          div.append(img)
+         
+    function start()
+    {
+        i=5;
+        id=setInterval(function(){
+            
+     if(i==images.length)
+        {
+            i=0;
+        }
+        div.innerHTML=null;
+        let img = document.createElement("img");
+          img.src=images[i];
+          img.style.width="100%"
+          img.style.height="100%"
+          
+          div.append(img)
+         //  let body= document.querySelector("#body")
+         //  body.append(div)   
+         i++;
+        },1000)
+    }
+    start();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
